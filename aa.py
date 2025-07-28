@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, filters
 
 TELEGRAM_BOT_TOKEN = "7843763370:AAFngUVUd4oroByEotWcVyh_xQKvVI-t5Ng"
-MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbC5jb20tQ29pbm8gVFIgASgBMAJCEzY0NzEwNTE3NTI4MjcyMzQxNzEKNwoKG9AA3QAr01X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzlmZDczZTE3NTM3MDE0OTg4OTEKMgoK5enqo9%2Frgs0gyBIJRXpnaSBVc3RhIAEoATACQhNmNjYwMWYxNzUzNzAxNTk3MDUxCjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITMjVlYTYwMTc1MzcwMjI4NzM0ORACGAEgAA%3D%3D"  # QR linki buraya
+MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbC5jb20tQ29pbm8gVFIgASgBMAJCEzY0NzEwNTE3NTI4MjcyMzQxNzEKNwoKG9AA3QAr01X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzlmZDczZTE3NTM3MDE0OTg4OTEKMgoK5enqo9%2Frgs0gyBIJRXpnaSBVc3RhIAEoATACQhNmNjYwMWYxNzUzNzAxNTk3MDUxCjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITMjVlYTYwMTc1MzcwMjI4NzM0OQo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUFaIAEoATACQhMxMTlmMDkxNzUzNzA4ODk2MTM4EAIYASAA"  # QR linki buraya
 
 # Hex isimlere karşılık gerçek isimler
 name_map = {
@@ -14,6 +14,7 @@ name_map = {
     "fd73e1753701498891": "EMRE KARABULUT",
     "6601f1753701597051": "EZGİ USTA",
     "5ea601753702287349": "ADEM ŞAL"
+     P35LHWMYF2WHSXZD
 }
 
 def decode_migration_uri(uri):
