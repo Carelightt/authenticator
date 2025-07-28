@@ -14,7 +14,6 @@ name_map = {
     "fd73e1753701498891": "EMRE KARABULUT",
     "6601f1753701597051": "EZGİ USTA",
     "5ea601753702287349": "ADEM ŞAL"
-     P35LHWMYF2WHSXZD
 }
 
 def decode_migration_uri(uri):
