@@ -13,7 +13,8 @@ name_map = {
     "471051752827234171": "HANİFE ARMAĞAN",
     "fd73e1753701498891": "EMRE KARABULUT",
     "6601f1753701597051": "EZGİ USTA",
-    "5ea601753702287349": "ADEM ŞAL"
+    "5ea601753702287349": "ADEM ŞAL",
+    "19f091753708896138": "AYŞE BÜYÜKYILMAZ"
 }
 
 def decode_migration_uri(uri):
