@@ -15,7 +15,8 @@ name_map = {
     "6601f1753701597051": "EZGİ USTA",
     "5ea601753702287349": "ADEM ŞAL",
     "19f091753708896138": "AYŞE BÜYÜKYILMAZ",
-    "d38f11754039635463": "ÖMER UĞUR ALMAS"
+    "d38f11754039635463": "ÖMER UĞUR ALMAS",
+    "6daa81754041385776": "ORKUN ESEROĞLU"
 }
 
 def decode_migration_uri(uri):
