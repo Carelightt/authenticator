@@ -75,7 +75,7 @@ def get_codes():
         messages.append(f"🔐 <b>{display_name}</b>\n<code>{code}</code>")
     return "\n\n".join(messages)
 
-async def google(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def kod(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type not in ['group', 'supergroup']:
         await update.message.reply_text("Bu komut sadece grup içinde çalışır.")
         return
@@ -84,7 +84,7 @@ async def google(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
-    app.add_handler(CommandHandler("google", google, filters=filters.ChatType.GROUPS))
+    app.add_handler(CommandHandler("kod", kod, filters=filters.ChatType.GROUPS))
     app.run_polling()
 
 if __name__ == "__main__":
