@@ -71,15 +71,16 @@ def get_codes():
         code = totp.now()
         key = acc.get("name", "")
         display_name = name_map.get(key, key)
-        messages.append(f"🔐 {display_name} kodu: {code}")
-    return "\n".join(messages)
+        # HTML code block: tıklayınca kopyalanır
+        messages.append(f"🔐 <b>{display_name}</b>\n<code>{code}</code>")
+    return "\n\n".join(messages)
 
 async def google(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.type not in ['group', 'supergroup']:
         await update.message.reply_text("Bu komut sadece grup içinde çalışır.")
         return
     codes = get_codes()
-    await update.message.reply_text(codes, parse_mode="Markdown")
+    await update.message.reply_text(codes, parse_mode="HTML")
 
 def main():
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
