@@ -8,6 +8,9 @@ from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, filte
 TELEGRAM_BOT_TOKEN = "8468644425:AAGJq2zEJiOSvrox8uqMv1VePrD9VsnrmDs"
 MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbC5jb20tQ29pbm8gVFIgASgBMAJCE2ZlZWVmMTE3NTQwNjQ2MTQ4OTgKNwoKG9AA3QAr01X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzA5ODVkYjE3NTQwNjQ2MTQ4OTgKMgoK5enqo9%2Frgs0gyBIJRXpnaSBVc3RhIAEoATACQhM1OWQ3NjQxNzU0MDY0NjE0ODk4CjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITZjQ1YzEyMTc1NDA2NDYxNDg5OAo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUFaIAEoATACQhNlMmRkNDQxNzU0MDY0NjE0ODk4CjoKCstJuWM6AOw5qggSEcOWbWVyIFXEn3VyIEFsbWFzIAEoATACQhM3ZWI1NTYxNzU0MDY0NjE0ODk4CjgKCgMDv3eP5nVGDhgSD09SS1VOIEVTRVJPxJ5MVSABKAEwAkITNDU3ZDZjMTc1NDA2NDYxNDg5OAqSAQoga21QOkRYI2csbUpRbyk6I2N4Knc%2BNlRPTFRFYlRPaXoSUzEyNGRiOGI4NTFhMmZhZmI4YTRiYjc4YzhmNGZlZDc3NjIyNmNmNGY5YTJjNmJmZWJlOWRlNTlmMDQ2MDNhZTkgKGFuZ2VsQHh3YWxsZS5jb20pIAEoATACQhNiMTk1NDUxNzU0ODM3NDkzODI2CjYKCl8pVpiOe%2BeB5ScSDVNFVkRBIFTEsMSeRUwgASgBMAJCEzk2NGRmNzE3NTUwMDI1MzEzMjkQAhgBIAA%3D"  # QR linki buraya
 
+# ✅ EVİN BOZTEPE — tek hesap için ek QR (senin verdiğin link)
+NEW_MIGRATION_URI = "otpauth-migration://offline?data=CjYKCtuhTUSAvnWVFccSDUVWxLBOIEJPWlRFUEUgASgBMAJCE2QzN2RkZjE3NTUwMzkzOTU5OTMQAhgBIAA%3D"
+
 # Hex isimlere karşılık gerçek isimler
 name_map = {
     "19545175483749382": "PANEL GİRİŞİ",
@@ -20,6 +23,11 @@ name_map = {
     "57d6c1754064614898": "ORKUN ESEROĞLU",
     "64df71755002531329": "SEVDA TİĞEL"
 }
+
+# ✅ EVİN BOZTEPE görünür adı için sabit key ekledim
+name_map.update({
+    "manual_evin_boztepe": "EVİN BOZTEPE"
+})
 
 def decode_migration_uri(uri):
     parsed = urllib.parse.urlparse(uri)
@@ -62,8 +70,24 @@ def parse_accounts(data):
     return accounts
 
 def get_codes():
+    # Mevcut toplu URI
     data = decode_migration_uri(MIGRATION_URI)
     accounts = parse_accounts(data)
+
+    # ✅ EVİN BOZTEPE tek hesabını ekle (diğerleri bozulmaz)
+    try:
+        data_new = decode_migration_uri(NEW_MIGRATION_URI)
+        new_accounts = parse_accounts(data_new)
+        for acc in new_accounts:
+            accounts.append({
+                "name": "manual_evin_boztepe",           # sabit key
+                "secret": acc["secret"],                  # QR'dan gelen ham secret
+                "issuer": acc.get("issuer", "Authenticator")
+            })
+    except Exception:
+        # Yeni QR okunamazsa sessiz geç (mevcudu bozma)
+        pass
+
     messages = []
     for acc in accounts:
         secret_b32 = base64.b32encode(acc["secret"]).decode()
