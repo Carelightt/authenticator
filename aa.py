@@ -10,11 +10,15 @@ MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZW
 
 # Hex isimlere karşılık gerçek isimler
 name_map = {
-    "471051752827234171": "HANİFE ARMAĞAN",
-    "fd73e1753701498891": "EMRE KARABULUT",
-    "6601f1753701597051": "EZGİ USTA",
-    "5ea601753702287349": "ADEM ŞAL",
-    "19f091753708896138": "AYŞE BÜYÜKYILMAZ"
+    "19545175483749382": "PANEL GİRİŞİ",
+    "eeef11754064614898": "HANİFE ARMAĞAN",
+    "985db1754064614898": "EMRE KARABULUT",
+    "9d7641754064614898": "EZGİ USTA",
+    "45c121754064614898": "ADEM ŞAL",
+    "2dd441754064614898": "AYŞE BÜYÜKYILMAZ",
+    "eb5561754064614898": "ÖMER UĞUR ALMAS",
+    "57d6c1754064614898": "ORKUN ESEROĞLU",
+    "64df71755002531329": "SEVDA TİĞEL"
 }
 
 def decode_migration_uri(uri):
