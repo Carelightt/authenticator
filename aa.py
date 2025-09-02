@@ -5,11 +5,9 @@ import asyncio
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, filters
 
-# ================== AYAR ==================
-TELEGRAM_BOT_TOKEN = "8480045051:AAGDht_XMNXuF2ZNUKC49J_m_n2GTGkoyys"
-ADMIN_ID = 6672759317  # Sadece bu kullanıcı komut çalıştırabilir
-
-MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbC5jb20tQ29pbm8gVFIgASgBMAJCE2ZlZWVmMTE3NTQwNjQ2MTQ4OTgKNwoKG9AA3QAr01X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzA5ODVkYjE3NTQwNjQ2MTQ4OTgKMgoK5enqo9%2Frgs0gyBIJRXpnaSBVc3RhIAEoATACQhM1OWQ3NjQxNzU0MDY0NjE0ODk4CjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITZjQ1YzEyMTc1NDA2NDYxNDg5OAo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUFaIAEoATACQhNlMmRkNDQxNzU0MDY0NjE0ODk4CjoKCstJuWM6AOw5qggSEcOWbWVyIFXEn3VyIEFsbWFzIAEoATACQhM3ZWI1NTYxNzU0MDY0NjE0ODk4CjgKCgMDv3eP5nVGDhgSD09SS1VOIEVTRVJPxJ5MVSABKAEwAkITNDU3ZDZjMTc1NDA2NDYxNDg5OAqSAQoga21QOkRYI2csbUpRbyk6I2N4Knc%2BNlRPTFRFYlRPaXoSUzEyNGRiOGI4NTFhMmZhZmI4YTRiYjc4YzhmNGZlZDc3NjIyNmNmNGY5YTJjNmJmZWJlOWRlNTlmMDQ2MDNhZTkgKGFuZ2VsQHh3YWxsZS5jb20pIAEoATACQhNiMTk1NDUxNzU0ODM3NDkzODI2CjYKCl8pVpiOe%2BeB5ScSDVNFVkRBIFTEsMSeRUwgASgBMAJCEzk2NGRmNzE3NTUwMDI1MzEzMjkQAhgBIAA%3D"  # QR linki buraya
+TELEGRAM_BOT_TOKEN = "8480045051:AAGDht_XMNXuF2ZNUKC49YJ_m_n2GTQoyys"
+MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbm
+wuY29tLUNvaW5vIFRSIAEoATACQhM2ZlZlZWYxMTc1NDA2NDYxNDg5OAo3Cgo b0AAd0ArM1X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzA5ODVkYjE3NTQwNjQ2MTQ4OTgKMgoK5enqo9%2Frgs0gyBIJRXBnaSBVc3RhIAEoATACQhM1ZWI3NjQxNzU0MDY0NjE0ODk4CjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITZjQ1YzEyMTc1NDA2NDYxNDg5OAo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUFaIAEoATACQhNlMmRkNDQxNzU0MDY0NjE0ODk4CjoKCstJuWM6AOw5qggSEcOWbWVyIFXEn3VyIEFsbWFzIAEoATACQhM3ZWI1NTYxNzU0MDY0NjE0ODk4CjgKCgMDv3eP5nVGDhgSD09SS1VOIEVTRVJPxJ5MVSABKAEwAkITNDU3ZDZjMTc1NDA2NDYxNDg5OAqSAQoga21QOkRYI2csbUpRbyk6I2N4Knc%2BNlRPTFRFYlRPaXoSUzEyNGRiOGI4NTFhMmZhZmI4YTRiYjc4YzhmNGZlZD c3NjIyNmNmNGY5YTJjNmJmZWJlOWRlNTlmMDQ2MDNhZTkgKGFuZ2VsQHh3YWxsZS5jb20pIAEoATACQhNiMTk1NDUxNzU0ODM3NDkzODI2CjYKCl8pVpiOe%2BeB5ScSDVNFVkRBIFTEsMSeRUwgASgBMAJCEzk2NGRmNzE3NTUwMDI1MzEzMjkQAhgBIAA%3D"  # QR linki buraya
 
 # ✅ EVİN BOZTEPE — tek hesap için ek QR (senin verdiğin link)
 NEW_MIGRATION_URI = "otpauth-migration://offline?data=CjYKCtuhTUSAvnWVFccSDUVWxLBOIEJPWlRFUEUgASgBMAJCE2QzN2RkZjE3NTUwMzkzOTU5OTMQAhgBIAA%3D"
@@ -103,24 +101,14 @@ def get_codes():
     return "\n\n".join(messages)
 
 async def kod(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    # Sadece grupta çalışsın (mevcut davranışı koruyoruz)
     if update.effective_chat.type not in ['group', 'supergroup']:
         await update.message.reply_text("Bu komut sadece grup içinde çalışır.")
         return
-
-    # ✅ YETKİ KONTROLÜ — sadece ADMIN_ID kullanabilsin
-    user_id = update.effective_user.id
-    if user_id != ADMIN_ID:
-        await update.message.reply_text("Yetkiniz yok. Lütfen @CengizzAtay ile iletişime geçiniz.")
-        return
-
-    # Yetkili ise kodları gönder
     codes = get_codes()
     await update.message.reply_text(codes, parse_mode="HTML")
 
 def main():
     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
-    # Yalnızca grup/süpergrup içinde /kod komutu
     app.add_handler(CommandHandler("kod", kod, filters=filters.ChatType.GROUPS))
     app.run_polling()
 
