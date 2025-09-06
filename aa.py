@@ -2,24 +2,11 @@ import base64
 import urllib.parse
 import pyotp
 import asyncio
-import re
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, filters
 
 TELEGRAM_BOT_TOKEN = "8480045051:AAGDht_XMNXuF2ZNUKC49J_m_n2GTGkoyys"
-MIGRATION_URI = (
-    "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbm"
-    "wuY29tLUNvaW5vIFRSIAEoATACQhM2ZlZlZWYxMTc1NDA2NDYxNDg5OAo3Cgo b0AAd0ArM1X3SxIORW1y"
-    "ZSBLYXJhYnVsdXQgASgBMAJCEzA5ODVkYjE3NTQwNjQ2MTQ4OTgKMgoK5enqo9%2Frgs0gyBIJRXBnaSBV"
-    "c3RhIAEoATACQhM1ZWI3NjQxNzU0MDY0NjE0ODk4CjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKA"
-    "EwAkITZjQ1YzEyMTc1NDA2NDYxNDg5OAo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUF"
-    "aIAEoATACQhNlMmRkNDQxNzU0MDY0NjE0ODk4CjoKCstJuWM6AOw5qggSEcOWbWVyIFXEn3VyIEFsbWFz"
-    "IAEoATACQhM3ZWI1NTYxNzU0MDY0NjE0ODk4CjgKCgMDv3eP5nVGDhgSD09SS1VOIEVTRVJPxJ5MVSABKA"
-    "EwAkITNDU3ZDZjMTc1NDA2NDYxNDg5OAqSAQoga21QOkRYI2csbUpRbyk6I2N4Knc%2BNlRPTFRFYlRPaX"
-    "oSUzEyNGRiOGI4NTFhMmZhZmI4YTRiYjc4YzhmNGZlZD c3NjIyNmNmNGY5YTJjNmJmZWJlOWRlNTlmMDQ"
-    "2MDNhZTkgKGFuZ2VsQHh3YWxsZS5jb20pIAEoATACQhNiMTk1NDUxNzU0ODM3NDkzODI2CjYKCl8pVpiO"
-    "e%2BeB5ScSDVNFVkRBIFTEsMSeRUwgASgBMAJCEzk2NGRmNzE3NTUwMDI1MzEzMjkQAhgBIAA%3D"
-)
+MIGRATION_URI = "otpauth-migration://offline?data=CksKCuRC3zgrq3wOpOgSImhhbmlmZWFybWFnYW43NEBnbWFpbC5jb20tQ29pbm8gVFIgASgBMAJCE2ZlZWVmMTE3NTQwNjQ2MTQ4OTgKNwoKG9AA3QAr01X3SxIORW1yZSBLYXJhYnVsdXQgASgBMAJCEzA5ODVkYjE3NTQwNjQ2MTQ4OTgKMgoK5enqo9%2Frgs0gyBIJRXpnaSBVc3RhIAEoATACQhM1OWQ3NjQxNzU0MDY0NjE0ODk4CjIKCtzlkz%2Fgmu50%2FtcSCUFkZW0gxZ5hbCABKAEwAkITZjQ1YzEyMTc1NDA2NDYxNDg5OAo8Cgp%2B%2BrPZmC6seV8jEhNBWcWeRSBCw5xZw5xLWUlMTUFaIAEoATACQhNlMmRkNDQxNzU0MDY0NjE0ODk4CjoKCstJuWM6AOw5qggSEcOWbWVyIFXEn3VyIEFsbWFzIAEoATACQhM3ZWI1NTYxNzU0MDY0NjE0ODk4CjgKCgMDv3eP5nVGDhgSD09SS1VOIEVTRVJPxJ5MVSABKAEwAkITNDU3ZDZjMTc1NDA2NDYxNDg5OAqSAQoga21QOkRYI2csbUpRbyk6I2N4Knc%2BNlRPTFRFYlRPaXoSUzEyNGRiOGI4NTFhMmZhZmI4YTRiYjc4YzhmNGZlZDc3NjIyNmNmNGY5YTJjNmJmZWJlOWRlNTlmMDQ2MDNhZTkgKGFuZ2VsQHh3YWxsZS5jb20pIAEoATACQhNiMTk1NDUxNzU0ODM3NDkzODI2CjYKCl8pVpiOe%2BeB5ScSDVNFVkRBIFTEsMSeRUwgASgBMAJCEzk2NGRmNzE3NTUwMDI1MzEzMjkQAhgBIAA%3D"  # QR linki buraya
 
 # ✅ EVİN BOZTEPE — tek hesap için ek QR (senin verdiğin link)
 NEW_MIGRATION_URI = "otpauth-migration://offline?data=CjYKCtuhTUSAvnWVFccSDUVWxLBOIEJPWlRFUEUgASgBMAJCE2QzN2RkZjE3NTUwMzkzOTU5OTMQAhgBIAA%3D"
@@ -43,26 +30,10 @@ name_map.update({
 })
 
 def decode_migration_uri(uri):
-    """
-    URL-decode + boşluk temizliği + padding düzeltme + URL-safe b64 decode.
-    """
     parsed = urllib.parse.urlparse(uri)
     query = urllib.parse.parse_qs(parsed.query)
-    data_b64 = query.get('data', [''])[0]
-
-    # URL decode
-    data_b64 = urllib.parse.unquote(data_b64)
-    # Boşluk/newline temizle
-    data_b64 = re.sub(r"\s+", "", data_b64)
-    # Padding düzelt (4'ün katı)
-    pad = (-len(data_b64)) % 4
-    if pad:
-        data_b64 += "=" * pad
-
-    try:
-        return base64.urlsafe_b64decode(data_b64)
-    except Exception:
-        return base64.b64decode(data_b64)
+    data_b64 = query['data'][0]
+    return base64.b64decode(data_b64)
 
 def parse_accounts(data):
     accounts = []
