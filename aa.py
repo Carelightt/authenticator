@@ -2,6 +2,7 @@ import base64
 import urllib.parse
 import pyotp
 import asyncio
+import re
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, filters
 
@@ -42,10 +43,26 @@ name_map.update({
 })
 
 def decode_migration_uri(uri):
+    """
+    URL-decode + boşluk temizliği + padding düzeltme + URL-safe b64 decode.
+    """
     parsed = urllib.parse.urlparse(uri)
     query = urllib.parse.parse_qs(parsed.query)
-    data_b64 = query['data'][0]
-    return base64.b64decode(data_b64)
+    data_b64 = query.get('data', [''])[0]
+
+    # URL decode
+    data_b64 = urllib.parse.unquote(data_b64)
+    # Boşluk/newline temizle
+    data_b64 = re.sub(r"\s+", "", data_b64)
+    # Padding düzelt (4'ün katı)
+    pad = (-len(data_b64)) % 4
+    if pad:
+        data_b64 += "=" * pad
+
+    try:
+        return base64.urlsafe_b64decode(data_b64)
+    except Exception:
+        return base64.b64decode(data_b64)
 
 def parse_accounts(data):
     accounts = []
